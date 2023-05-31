@@ -5,10 +5,19 @@ let HR = Array();
 let PS = Array();
 let PD = Array();
 let DT = Array();
+var len = 0;
+
+setTimeout(function next() {
+
+	ReloadDataTable()
+
+    setTimeout(next, 30000);
+
+}, 30000);
 
 function ReloadDataTable(){
-	replaceHTML("nameUser",sessionStorage.getItem("useruuid"),true)
 	replaceHTML("emailUser",sessionStorage.getItem("emailuuid"),true)
+	replaceHTML("nameUser",sessionStorage.getItem("useruuid"),true)
 
 	if(sessionStorage.getItem("useruuid") != "" && sessionStorage.getItem("useruuid") != null){
 		fetch(urldata, {
@@ -26,10 +35,14 @@ function ReloadDataTable(){
 		.then(response => { Data = response.Response[0]})
 		.then(_ => {
             try {
-                for(i=0; i<= Data.length; i++){
-                    addRow(i,Data[i][2],Data[i][3],Data[i][1],Data[i][4])
+				console.log(Data.length,len)
+				if(Data.length > len){
+					for(i=len; i<= Data.length; i++){
+							addRow(i,Data[i][2],Data[i][3],Data[i][1],Data[i][4]);
+							len = i+1;
+					}
                 }
-            } catch (error) {console.error(error);}		
+            } catch (error) {console.log(error);}		
 		})
     }
 }

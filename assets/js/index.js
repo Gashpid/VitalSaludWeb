@@ -1,3 +1,4 @@
+var urldelete = "https://heartmonitoring.pythonanywhere.com/delete_from_table";
 var urldata = "https://heartmonitoring.pythonanywhere.com/select_from_table";
 var Data = null;
 let LB = Array();
@@ -259,4 +260,35 @@ function LogOut(){
 	sessionStorage.removeItem("useruuid")
     sessionStorage.removeItem("emailuuid")
     window.location.href = "login.html"
+}
+
+
+function ClearData(){
+	var name = sessionStorage.getItem("useruuid")
+
+	if(sessionStorage.getItem("useruuid") != "" && sessionStorage.getItem("useruuid") != null){
+		fetch(urldelete, {
+			method: 'POST',
+			headers: {
+				"Content-type": "application/json; charset=UTF-8"
+			},
+			body: JSON.stringify({ 
+				'table': 'htadata',
+				'arg': "WHERE name='"+name+"'"
+			})
+		})
+		.then(response => response.json())
+		.then(response => {console.log(response)
+		Data = null;
+		LB = Array();
+		HR = Array();
+		PS = Array();
+		PD = Array();
+		len = 0;
+		HT = null;
+
+		ReloadData();
+		window.location.reload()
+	})
+	}
 }
